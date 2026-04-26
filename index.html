@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jess & Lewis — 17 April 2027</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #f5f0e8;
+      --parchment:#ede5d0;
+      --stone:    #c8b89a;
+      --bark:     #7a5c3e;
+      --earth:    #4a3728;
+      --moss:     #6b7c5c;
+      --fog:      #9eaaa0;
+      --charcoal: #2e2822;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 1.1rem 2rem;
+      background: rgba(245,240,232,0.88);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--stone);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: var(--bark);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--earth); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--parchment);
+    }
+
+    /* grain texture overlay */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* decorative botanical SVG lines */
+    .botanical {
+      position: absolute;
+      opacity: 0.13;
+      pointer-events: none;
+    }
+    .botanical-left  { left: -60px; top: 50%; transform: translateY(-50%); width: 340px; }
+    .botanical-right { right: -60px; top: 50%; transform: translateY(-50%) scaleX(-1); width: 340px; }
+
+    .hero-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 1.6rem;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      font-weight: 300;
+      line-height: 0.95;
+      color: var(--earth);
+      letter-spacing: -0.01em;
+      animation: fadeUp 1s 0.15s ease both;
+    }
+
+    .hero-names em {
+      font-style: italic;
+      color: var(--bark);
+    }
+
+    .hero-divider {
+      width: 80px;
+      height: 1px;
+      background: var(--stone);
+      margin: 2rem auto;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    .hero-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--bark);
+      animation: fadeUp 1s 0.4s ease both;
+    }
+
+    .hero-venue {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 0.5rem;
+      animation: fadeUp 1s 0.5s ease both;
+    }
+
+    /* countdown */
+    #countdown {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      animation: fadeUp 1s 0.65s ease both;
+    }
+
+    .count-block { text-align: center; }
+
+    .count-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      color: var(--earth);
+      line-height: 1;
+    }
+
+    .count-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 0.3rem;
+    }
+
+    .count-sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      color: var(--stone);
+      align-self: flex-start;
+      padding-top: 0.2rem;
+      line-height: 1;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--fog);
+      animation: bob 2s ease-in-out infinite;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 6rem 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 300;
+      color: var(--earth);
+      line-height: 1.1;
+      margin-bottom: 1.6rem;
+    }
+
+    .section-title em { font-style: italic; color: var(--bark); }
+
+    .rule {
+      width: 50px;
+      height: 1px;
+      background: var(--stone);
+      margin-bottom: 2rem;
+    }
+
+    .body-text {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: #5a4f45;
+      max-width: 640px;
+    }
+
+    /* ── STORY ── */
+    #story { border-top: 1px solid var(--parchment); }
+
+    /* ── VENUE ── */
+    #venue {
+      background: var(--parchment);
+      max-width: 100%;
+      padding: 6rem 2rem;
+    }
+
+    #venue .inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .venue-detail {
+      margin-bottom: 1.6rem;
+    }
+
+    .venue-detail-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 0.3rem;
+    }
+
+    .venue-detail-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--earth);
+    }
+
+    .venue-map-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bark);
+      text-decoration: none;
+      border-bottom: 1px solid var(--stone);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .venue-map-link:hover { color: var(--earth); border-color: var(--earth); }
+
+    .venue-description {
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: #5a4f45;
+    }
+
+    /* ── TRAVEL ── */
+    #travel { border-top: 1px solid var(--parchment); }
+
+    .travel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .travel-card {
+      background: var(--parchment);
+      border: 1px solid var(--stone);
+      padding: 1.8rem;
+      border-radius: 2px;
+    }
+
+    .travel-card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .travel-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--earth);
+      margin-bottom: 0.6rem;
+      font-weight: 400;
+    }
+
+    .travel-card p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #6a5f55;
+    }
+
+    .travel-card a {
+      color: var(--bark);
+      text-decoration: none;
+      border-bottom: 1px solid var(--stone);
+    }
+
+    /* ── RSVP ── */
+    #rsvp {
+      background: var(--earth);
+      color: var(--cream);
+      max-width: 100%;
+      padding: 6rem 2rem;
+    }
+
+    #rsvp .inner {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    #rsvp .section-label { color: var(--stone); }
+    #rsvp .section-title { color: var(--cream); }
+    #rsvp .rule { background: var(--bark); }
+    #rsvp .body-text { color: #c8b89a; }
+
+    .rsvp-form { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.4rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(200,184,154,0.35);
+      color: var(--cream);
+      padding: 0.85rem 1rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      border-radius: 1px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(245,240,232,0.35); }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--stone);
+    }
+
+    .form-group select option { background: var(--earth); color: var(--cream); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+
+    .btn-submit {
+      margin-top: 0.6rem;
+      padding: 1rem 2.5rem;
+      background: var(--bark);
+      color: var(--cream);
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: var(--stone); }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2.5rem;
+      border: 1px solid rgba(200,184,154,0.3);
+    }
+
+    .form-success p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--stone);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-success span {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: rgba(245,240,232,0.5);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fog);
+      border-top: 1px solid var(--parchment);
+    }
+
+    footer strong {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      text-transform: none;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--bark);
+      font-weight: 300;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { gap: 1.2rem; font-size: 0.65rem; }
+      #venue .inner { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+      #countdown { gap: 1rem; }
+      .botanical { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#story">Our Story</a>
+    <a href="#venue">The Day</a>
+    <a href="#travel">Getting Here</a>
+    <a href="#rsvp">RSVP</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+
+    <!-- Botanical decorations (SVG) -->
+    <svg class="botanical botanical-left" viewBox="0 0 300 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M150 580 C150 400 80 320 40 200 C20 140 30 80 60 40" stroke="#7a5c3e" stroke-width="1.5" fill="none"/>
+      <path d="M150 480 C120 440 60 430 30 400" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <path d="M140 400 C160 360 200 350 240 330" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <path d="M148 320 C110 290 80 260 50 220" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <path d="M152 250 C180 220 220 210 260 195" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <ellipse cx="30" cy="398" rx="18" ry="10" transform="rotate(-30 30 398)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <ellipse cx="242" cy="328" rx="18" ry="10" transform="rotate(20 242 328)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <ellipse cx="50" cy="218" rx="15" ry="9" transform="rotate(-40 50 218)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <ellipse cx="262" cy="193" rx="15" ry="9" transform="rotate(15 262 193)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <circle cx="60" cy="40" r="6" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <circle cx="68" cy="32" r="4" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <circle cx="52" cy="34" r="4" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+    </svg>
+    <svg class="botanical botanical-right" viewBox="0 0 300 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M150 580 C150 400 80 320 40 200 C20 140 30 80 60 40" stroke="#7a5c3e" stroke-width="1.5" fill="none"/>
+      <path d="M150 480 C120 440 60 430 30 400" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <path d="M140 400 C160 360 200 350 240 330" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <path d="M148 320 C110 290 80 260 50 220" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <path d="M152 250 C180 220 220 210 260 195" stroke="#7a5c3e" stroke-width="1" fill="none"/>
+      <ellipse cx="30" cy="398" rx="18" ry="10" transform="rotate(-30 30 398)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <ellipse cx="242" cy="328" rx="18" ry="10" transform="rotate(20 242 328)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <ellipse cx="50" cy="218" rx="15" ry="9" transform="rotate(-40 50 218)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <ellipse cx="262" cy="193" rx="15" ry="9" transform="rotate(15 262 193)" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <circle cx="60" cy="40" r="6" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <circle cx="68" cy="32" r="4" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+      <circle cx="52" cy="34" r="4" stroke="#7a5c3e" stroke-width="0.8" fill="none"/>
+    </svg>
+
+    <p class="hero-eyebrow">We're getting married</p>
+
+    <h1 class="hero-names">
+      <em>Jess</em><br>&amp;<br><em>Lewis</em>
+    </h1>
+
+    <div class="hero-divider"></div>
+
+    <p class="hero-date">Saturday, 17th April 2027</p>
+    <p class="hero-venue">The Cow Shed · Crail · Fife · Scotland</p>
+
+    <div id="countdown">
+      <div class="count-block">
+        <div class="count-num" id="cd-days">—</div>
+        <div class="count-label">Days</div>
+      </div>
+      <div class="count-sep">·</div>
+      <div class="count-block">
+        <div class="count-num" id="cd-hours">—</div>
+        <div class="count-label">Hours</div>
+      </div>
+      <div class="count-sep">·</div>
+      <div class="count-block">
+        <div class="count-num" id="cd-mins">—</div>
+        <div class="count-label">Minutes</div>
+      </div>
+      <div class="count-sep">·</div>
+      <div class="count-block">
+        <div class="count-num" id="cd-secs">—</div>
+        <div class="count-label">Seconds</div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">↓ &nbsp; Scroll to explore</div>
+  </section>
+
+  <!-- OUR STORY -->
+  <section id="story">
+    <p class="section-label">How it began</p>
+    <h2 class="section-title"><em>Our Story</em></h2>
+    <div class="rule"></div>
+    <p class="body-text">
+      This is where you can share how you met, your favourite memories together, and the story of how Lewis proposed. 
+      We'll fill this in with your words — just let us know what you'd like to say and we'll write it up beautifully for you.
+    </p>
+    <br>
+    <p class="body-text" style="color: var(--stone); font-style: italic; font-size: 0.85rem;">
+      ✏️ Placeholder — update this section with your story!
+    </p>
+  </section>
+
+  <!-- THE DAY -->
+  <div id="venue" style="background: var(--parchment); width: 100%;">
+    <div class="inner" style="max-width: 860px; margin: 0 auto; padding: 6rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;">
+      <div>
+        <p class="section-label">Save the date</p>
+        <h2 class="section-title"><em>The Day</em></h2>
+        <div class="rule"></div>
+
+        <div class="venue-detail">
+          <div class="venue-detail-label">Date</div>
+          <div class="venue-detail-value">Saturday, 17th April 2027</div>
+        </div>
+
+        <div class="venue-detail">
+          <div class="venue-detail-label">Venue</div>
+          <div class="venue-detail-value">The Cow Shed, Crail</div>
+        </div>
+
+        <div class="venue-detail">
+          <div class="venue-detail-label">Location</div>
+          <div class="venue-detail-value">East Neuk of Fife, Scotland</div>
+        </div>
+
+        <div class="venue-detail">
+          <div class="venue-detail-label">Ceremony</div>
+          <div class="venue-detail-value" style="color: var(--stone); font-style: italic; font-size: 1rem;">Time to be confirmed</div>
+        </div>
+
+        <a class="venue-map-link" href="https://maps.google.com/?q=The+Cow+Shed+Crail+Fife" target="_blank" rel="noopener">
+          View on Google Maps ↗
+        </a>
+      </div>
+
+      <div>
+        <p class="venue-description">
+          Nestled in the East Neuk of Fife, <strong>The Cow Shed</strong> is a beautiful rustic steading 
+          with sea views across the Firth of Forth to the Bass Rock and East Lothian. 
+          Full of original character and charm, it's the perfect blank canvas for our day.
+        </p>
+        <br>
+        <p class="venue-description">
+          The venue sits just outside the picturesque coastal village of Crail — one of Scotland's most 
+          beautiful corners, with stunning beaches, traditional harbours, and rolling Fife farmland all around.
+        </p>
+        <br>
+        <p class="venue-description" style="color: var(--stone); font-style: italic; font-size: 0.85rem;">
+          ✏️ We'll add ceremony and reception timings once confirmed.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAVEL & ACCOMMODATION -->
+  <section id="travel">
+    <p class="section-label">Getting here & staying over</p>
+    <h2 class="section-title"><em>Travel &amp; Accommodation</em></h2>
+    <div class="rule"></div>
+    <p class="body-text">
+      The Cow Shed is located just outside Crail in the East Neuk of Fife — 
+      about 10 minutes' drive from St Andrews and roughly 1 hour from Edinburgh. 
+      Here's everything you need to know about getting there.
+    </p>
+
+    <div class="travel-grid">
+      <div class="travel-card">
+        <div class="travel-card-icon">🚗</div>
+        <h3>By Car</h3>
+        <p>
+          From St Andrews, take the A917 towards Crail. Just before entering the village, 
+          take the sharp right onto the B940 — follow the brown tourist signs. 
+          There is on-site car parking with pink gravel.
+          <br><br>
+          <a href="https://maps.google.com/?q=The+Cow+Shed+Crail+Fife" target="_blank" rel="noopener">Get directions ↗</a>
+        </p>
+      </div>
+
+      <div class="travel-card">
+        <div class="travel-card-icon">🚆</div>
+        <h3>By Train</h3>
+        <p>
+          The nearest train station is <strong>Leuchars</strong>, with regular services 
+          from Edinburgh (approx. 1 hr) and Dundee (approx. 20 mins). 
+          From Leuchars, a taxi or pre-booked transfer to the venue takes around 25 minutes.
+        </p>
+      </div>
+
+      <div class="travel-card">
+        <div class="travel-card-icon">✈️</div>
+        <h3>By Air</h3>
+        <p>
+          Edinburgh Airport is the most convenient, around 1 hour 20 minutes by car. 
+          Dundee Airport also operates limited services and is closer to the venue at around 45 minutes.
+        </p>
+      </div>
+
+      <div class="travel-card">
+        <div class="travel-card-icon">🏡</div>
+        <h3>Accommodation</h3>
+        <p>
+          The Cow Shed has on-site cottages sleeping up to 46 guests in total — 
+          perfect for staying close to the celebrations! 
+          More details and booking information to follow.
+          <br><br>
+          Nearby towns including Crail, Anstruther, and St Andrews also 
+          offer a wide range of hotels, B&Bs, and holiday cottages.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <div id="rsvp" style="background: var(--earth); width: 100%;">
+    <div class="inner" style="max-width: 620px; margin: 0 auto; padding: 6rem 2rem;">
+      <p class="section-label" style="color: var(--stone);">Kindly reply by [date TBC]</p>
+      <h2 class="section-title" style="color: var(--cream);">RSVP</h2>
+      <div class="rule" style="background: var(--bark);"></div>
+      <p class="body-text" style="color: #c8b89a;">
+        We'd love to celebrate with you. Please let us know if you'll be joining us by filling in the form below.
+      </p>
+
+      <form class="rsvp-form" id="rsvpForm" onsubmit="handleRSVP(event)">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Your full name" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="attending">Will you attend?</label>
+            <select id="attending" name="attending" required>
+              <option value="" disabled selected>Please select</option>
+              <option value="yes">Joyfully accepts</option>
+              <option value="no">Regretfully declines</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="guests">Number attending</label>
+            <select id="guests" name="guests">
+              <option value="1">1 guest</option>
+              <option value="2">2 guests</option>
+              <option value="3">3 guests</option>
+              <option value="4">4 guests</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dietary">Dietary requirements</label>
+          <textarea id="dietary" name="dietary" rows="3" 
+            placeholder="Please list any dietary requirements or allergies for your party…"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message for the couple (optional)</label>
+          <textarea id="message" name="message" rows="3" 
+            placeholder="Share your well wishes…"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Send RSVP</button>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <p>Thank you so much! 🌿</p>
+        <span>We've received your RSVP and can't wait to celebrate with you.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Jess &amp; Lewis — 17 April 2027</strong>
+    The Cow Shed · Crail · Fife · Scotland
+  </footer>
+
+  <script>
+    // ── Countdown Timer ──
+    function updateCountdown() {
+      const wedding = new Date('2027-04-17T12:00:00');
+      const now = new Date();
+      const diff = wedding - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown').innerHTML = '<p style="font-family:Cormorant Garamond,serif;font-size:1.5rem;color:var(--bark);font-style:italic;">Today is the day! 🎉</p>';
+        return;
+      }
+
+      const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').textContent  = String(days).padStart(3, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2, '0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ── RSVP Form ──
+    function handleRSVP(e) {
+      e.preventDefault();
+      // In production this would POST to a backend / Formspree / Netlify Forms etc.
+      // For now, show a thank-you message.
+      document.getElementById('rsvpForm').style.display = 'none';
+      const success = document.getElementById('formSuccess');
+      success.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
