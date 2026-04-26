@@ -688,7 +688,7 @@
         We'd love to celebrate with you. Please let us know if you'll be joining us by filling in the form below.
       </p>
 
-      <form class="rsvp-form" id="rsvpForm" onsubmit="handleRSVP(event)">
+      <form class="rsvp-form" id="rsvpForm" onsubmit="<form class="rsvp-form" id="rsvpForm" action="https://formspree.io/f/mqewjorp" method="POST">">
         <div class="form-group">
           <label for="name">Full Name</label>
           <input type="text" id="name" name="name" placeholder="Your full name" required />
@@ -728,6 +728,7 @@
         </div>
 
         <button type="submit" class="btn-submit">Send RSVP</button>
+        <input type="hidden" name="_next" value="https://www.jessandlewgetmarried.fun" />
       </form>
 
       <div class="form-success" id="formSuccess">
